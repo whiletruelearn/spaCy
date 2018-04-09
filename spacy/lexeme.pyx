@@ -15,7 +15,7 @@ from .attrs cimport IS_TITLE, IS_UPPER, LIKE_URL, LIKE_NUM, LIKE_EMAIL, IS_STOP
 from .attrs cimport IS_BRACKET, IS_QUOTE, IS_LEFT_PUNCT, IS_RIGHT_PUNCT, IS_CURRENCY, IS_OOV
 from .attrs cimport PROB
 from .attrs import intify_attrs
-from .errors import Errors
+from .errors import Errors,Warnings,user_warning
 
 
 memset(&EMPTY_LEXEME, 0, sizeof(LexemeC))
@@ -176,8 +176,10 @@ cdef class Lexeme:
             cdef int length = self.vocab.vectors_length
             if length == 0:
                 raise ValueError(Errors.E010)
-            return self.vocab.get_vector(self.c.orth)
-
+            vector = self.vocab.get_vector(self.c.orth)
+            if numpy.count_nonzero(vector) == 0:
+                user_warning(Warnings.WOO7)
+            return vector
         def __set__(self, vector):
             if len(vector) != self.vocab.vectors_length:
                 raise ValueError(Errors.E073.format(new_length=len(vector),

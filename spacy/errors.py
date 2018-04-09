@@ -38,6 +38,11 @@ class Warnings(object):
             "surprising to you, make sure the Doc was processed using a model "
             "that supports named entity recognition, and check the `doc.ents` "
             "property manually if necessary.")
+    WOO7 = ("To make them compact and fast, spaCy's small models (all packages "
+            "that end in sm) don't ship with word vectors, and only include "
+            "context-sensitive tensors. This means you can still use the similarity()"
+            "methods to compare documents, spans and tokens – but the result"
+            "won't be as good as using real world vectors.")
 
 
 @add_codes
